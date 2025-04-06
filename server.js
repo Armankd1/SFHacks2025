@@ -22,6 +22,10 @@ app.get('/exerciseSelection', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'exerciseSelection.html'));
 });
 
+app.get('/infoPage', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'infopage.html'));
+});
+
 app.get('/exerciseExplainer', (req, res) => {
     const exercise = req.query.exercise; // Get the exercise from query parameters
     const exerciseInfo = exerciseData.find(item => item.exerciseName === exercise);
