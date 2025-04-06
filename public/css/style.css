@@ -1,217 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:wght@400;700&display=swap');
 
 body {
-  font-family: 'Inclusive Sans', Arial, Verdana, sans-serif; /* Apply Inclusive Sans font */
-  background: #000;
   margin: 0;
-  color: #fff;
-  height: 100%;
-}
-a {
-	color: #03a9f4;
-}
-#canvas {
-  width: 100%;
-  height: auto;
-}
-#video {
-  display: none;
-}
-#view_3d {
-  background: #fff;
-  position:  fixed;
-  width:  600px;
-  height: 600px;
-  bottom: 0;
-  right: 0;
-  opacity:  0.9;
-  display:  none;
-}
-#info_debug {
-  position: fixed;
-  top: 0;
-  left: 0;
-  color:  #fff;
-  text-align:  left;
-  font-size:  0.8rem;
-}
-#info_counter {
-  position: fixed;
-  top: 0;
-  left: 0;
-  color:  #fff;
-  font-size: 3rem;
-  font-weight: bold;
-  color:  yellow;
-}
-#controls {
-	margin-top: 20px;
-  margin-bottom: 20px;
-	text-align: center;
-}
-#status {
-  color: yellow;
-}
-#btn_toggle_controls {
-  position:  fixed;
-  top: 0;
-  right: 80px;
-  font-size:  0.8rem;
-}
-.container-fluid {
-	width: 100%;
-  height: auto;
-	text-align:center;
-	margin-top: 10px;
-}
-.copyright {
-	margin-top: 10px;
-	font-size:  0.8rem;
-	color:  gray;
-}
-.footer {
-  text-align:  center;
-  color:  silver;
-  font-size:  0.7rem;
-}
-.clickable:hover {
-  cursor: pointer;
-}
-.camera {
-  height:  100% !important;
-}
-.github-corner {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 9999;
+  padding: 0;
+  background-color: black;
+  color: white;
+  font-family: 'Inclusive Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-.github-corner:hover .octo-arm {
-    animation: octocat-wave 560ms ease-in-out;
-}
-
-@keyframes octocat-wave {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    20% {
-        transform: rotate(-25deg);
-    }
-
-    40% {
-        transform: rotate(10deg);
-    }
-
-    60% {
-        transform: rotate(-25deg);
-    }
-
-    80% {
-        transform: rotate(10deg);
-    }
-
-    100% {
-        transform: rotate(0deg);
-    }
-}
-
-@media (max-width: 500px) {
-    .github-corner:hover .octo-arm {
-        animation: none;
-    }
-
-    .github-corner .octo-arm {
-        animation: octocat-wave 560ms ease-in-out;
-    }
-}
 h1 {
-  position: relative; /* Change from absolute to relative */
-  margin-top: 300px; /* Add some margin for spacing */
-  margin-bottom: 300px;
-  text-align: center;
-  font-size: 5rem; /* Increase the font size */
-  line-height: normal; 
+  font-size: 4.5rem;
+  margin-top: 80px;
+  margin-bottom: 1rem;
 }
-.exerciseExplainer{
-  background-color: black;
-  justify-content: center;
-  align-items: center;
-}
-.explHead{
-  font-family: 'Inclusive Sans', Arial, Verdana, sans-serif;
-  color: white;
-  font-size: 6rem;
-  text-align: center;
-  margin-top: 5%;
-  margin-bottom: 5%;
-}
-.explP{
-  font-family: 'Inclusive Sans', Arial, Verdana, sans-serif;
-  color: white;
+
+p {
   font-size: 2rem;
-  text-align: center;
-  margin-top: 5%;
-  margin-bottom: 5%;
-}
-.exercises{
-  background-color: black;
-  display: flex;
-  flex-direction: column;
-  margin-top: 2%;
-  margin-left: 5%;
-  margin-right: 5%;
-  margin-bottom: 2%;
-  justify-content: center;
-  align-items: center;
-}
-.jumpJack, .squat, .highKneeRaises {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center content horizontally */
-  text-align: center; /* Ensure text is centered */
+  line-height: 1.4;
+  margin-bottom: 1rem;
 }
 
-.jj-image, .sq-image, .kr-image {
-  display: flex;
-  justify-content: center; /* Center the image horizontally */
-  align-items: center;
+a {
+  color: #03a9f4;
 }
 
-.jj-text, .sq-text, .kr-text, .exHead {
-  text-align: center; /* Center the text */
-  margin-top: 10px; /* Add spacing between the image and the text */
-  font-size: 2.5rem; /* Ensure the text is large and readable */
-}
-.jumpJack{
-  margin-bottom: 5%;
-  order: 1;
-}
-.squat{
-  margin-bottom: 5%;
-  order: 2;
-}
-
-.highKneeRaises{
-  order: 3;
-  margin-bottom: 5%;
-}
-.exHead{
-  font-size: 2.5rem;
-}
-
-.exText, .exHead, .jj-text, .sq-text, .kr-text {
-  font-family: 'Inclusive Sans', Arial, Verdana, sans-serif; /* Ensure font is applied to all exercise texts */
-}
-
+/* === Sound Waveform === */
 .pulse-waveform {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 6px;
   height: 100px;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .bar {
@@ -223,7 +48,20 @@ h1 {
   transition: height 0.5s ease;
 }
 
-/* Randomized animation delays for a natural, unsynced feel */
+@keyframes dance {
+  0%   { height: 30px; }
+  20%  { height: 60px; }
+  40%  { height: 40px; }
+  60%  { height: 80px; }
+  80%  { height: 50px; }
+  100% { height: 30px; }
+}
+
+.pulse-waveform.paused .bar {
+  animation-play-state: paused;
+}
+
+/* Unsynced animation delays */
 .bar:nth-child(1) { animation-delay: 0s; }
 .bar:nth-child(2) { animation-delay: 0.2s; }
 .bar:nth-child(3) { animation-delay: 0.1s; }
@@ -236,17 +74,42 @@ h1 {
 .bar:nth-child(10) { animation-delay: 0.1s; }
 .bar:nth-child(11) { animation-delay: 0.25s; }
 
-/* Animation keyframe to simulate bouncing motion */
-@keyframes dance {
-  0%   { height: 30px; }
-  20%  { height: 60px; }
-  40%  { height: 40px; }
-  60%  { height: 80px; }
-  80%  { height: 50px; }
-  100% { height: 30px; }
+/* === Exercises Section === */
+.exercises {
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
-/* Pause animation in place */
-.pulse-waveform.paused .bar {
-  animation-play-state: paused;
+.jumpJack, .squat, .highKneeRaises {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 5%;
 }
+
+.jj-image, .sq-image, .kr-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.exHead {
+  font-size: 2.5rem;
+  font-family: 'Inclusive Sans', Arial, sans-serif;
+  margin-top: 10px;
+}
+
+/* === Misc (not used but preserved) === */
+#canvas, #video, #view_3d, #info_debug, #info_counter,
+#controls, #status, #btn_toggle_controls, .container-fluid,
+.copyright, .footer, .camera, .github-corner {
+  display: none;
+}
+

@@ -8,6 +8,15 @@
 </head>
 <body>
     <h1 class="head">Select an Exercise</h1>
+    <p>Here is the current list of exercises.</p>
+
+    <div class="pulse-waveform paused" id="waveform">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div>
+    </div>
+
     <div class="exercises">
         <div class="jumpJack">
             <div class="jj-image">
@@ -34,5 +43,116 @@
             <h2 class="exHead">High Knee Raises</h2>
         </div>
     </div>
+
+    <audio id="exerciseAudio" src="sounds/exerciseSelect.mp3"></audio>
+
+    <script>
+      const waveform = document.getElementById('waveform');
+      const audio = document.getElementById('exerciseAudio');
+      const bars = waveform.querySelectorAll('.bar');
+      const delays = [0, 0.2, 0.1, 0.4, 0.15, 0.05, 0.3, 0.2, 0.35, 0.1, 0.25];
+      let shouldBeListening = false;
+    
+      function getDelay(index) {
+        return delays[index] + 's';
+      }
+    
+      function restoreAnimations() {
+        bars.forEach((bar, index) => {
+          bar.style.animation = `dance 1s infinite ease-in-out`;
+          bar.style.animationDelay = getDelay(index);
+        });
+      }
+    
+      function smoothReset() {
+        bars.forEach(bar => {
+          bar.style.animation = 'none';
+        });
+        requestAnimationFrame(() => {
+          bars.forEach(bar => {
+            bar.style.height = '30px';
+          });
+        });
+      }
+    
+      function stopRecognition() {
+        shouldBeListening = false;
+        recognition.stop();
+      }
+    
+      function startRecognition() {
+        shouldBeListening = true;
+        recognition.start();
+      }
+    
+      function playAudio() {
+        stopRecognition();
+        waveform.classList.remove('paused');
+        restoreAnimations();
+        audio.play().catch(err => {
+          console.warn("Audio autoplay blocked:", err);
+        });
+      }
+    
+      audio.addEventListener('play', () => {
+        waveform.classList.remove('paused');
+      });
+    
+      audio.addEventListener('ended', () => {
+        waveform.classList.add('paused');
+        smoothReset();
+        startRecognition();
+    
+        // Scroll to exercises
+        const exerciseSection = document.querySelector('.exercises');
+        if (exerciseSection) {
+          exerciseSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    
+      // Voice Recognition
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+    
+      recognition.onresult = (event) => {
+        const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+        console.log('Heard:', transcript);
+    
+        if (!shouldBeListening) return;
+    
+        if (transcript.includes('jumping') || transcript.includes('one')) {
+          window.location.href = '/exerciseExplainer?exercise=JumpingJack';
+        } else if (transcript.includes('squat') || transcript.includes('two')) {
+          window.location.href = '/exerciseExplainer?exercise=Squat';
+        } else if (transcript.includes('knee') || transcript.includes('three')) {
+          window.location.href = '/exerciseExplainer?exercise=HighKneeRaises';
+        }
+      };
+    
+      recognition.onerror = (event) => {
+        console.warn('Voice recognition error:', event.error);
+      };
+    
+      recognition.onend = () => {
+        if (shouldBeListening) recognition.start();
+      };
+    
+      // Touch fallback
+      document.body.addEventListener('click', () => {
+        if (shouldBeListening) {
+          const section = document.querySelector('.exercises');
+          if (section) section.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    
+      // INIT
+      window.addEventListener('load', () => {
+        playAudio();
+      });
+    </script>
+
 </body>
 </html>
