@@ -12,7 +12,7 @@ const app = {
             const model = 'BlazePoseFull';
             const source = 'camera';
 
-            soundPlayer.preload();
+            soundPlayer.preload();//-------------------- SOUND
 
             document.getElementById('source-' + source)?.classList.add('active');
 

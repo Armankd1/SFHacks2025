@@ -849,9 +849,11 @@ const tracker = {
             if (tracker.squatState === 'down' && isStanding && !kneesCaving) {
                 tracker.squatCounter++;
                 tracker.squatState = 'up';
-            if(tracker.squatCounter >= 5) {
+                soundPlayer.play(tracker.squatCounter);//----------------------------------- SOUND
+            if(tracker.squatCounter > 5) {
                 tracker.squatCounter = 0;
             }
+
             }
 
             tracker.ctx.fillStyle = 'lime';
@@ -862,6 +864,19 @@ const tracker = {
                 tracker.ctx.fillStyle = 'red';
                 tracker.ctx.font = '24px Arial';
                 tracker.ctx.fillText('Knees are caving in!', 30, 100);
+            }
+
+            if (tracker.squatState === 'down' && isStanding && !kneesCaving) {//------------------------- MOTIVATION AFTER IDLE
+                tracker.squatCounter++;
+                tracker.squatState = 'up';
+                soundPlayer.play(tracker.squatCounter);
+                lastSquatTime = performance.now(); // Reset timer on success
+            }
+
+            if (performance.now() - lastSquatTime > 8000) {
+                soundPlayer.playRandomMotivation();
+                lastSquatTime = performance.now(); // avoid repeating every frame
+                // Play motivation if idle too long
             }
         }
     },
