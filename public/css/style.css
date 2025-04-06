@@ -11,6 +11,7 @@ body {
   align-items: center;
   text-align: center;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 /* Top section - full screen height with centered content */
@@ -150,5 +151,13 @@ a {
 #controls, #status, #btn_toggle_controls, .container-fluid,
 .copyright, .footer, .camera, .github-corner {
   display: none;
+}
+
+html {
+  scrollbar-width: none; /* Firefox */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
