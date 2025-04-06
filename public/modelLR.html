@@ -19,7 +19,7 @@
 					</div>
 				</div>
 			</div>
-		</form>	
+		</form>
 
 		<button id="btn_toggle_video" class="btn btn-secondary">VIDEO ON/OFF</button>
 		<button id="btn_toggle_debug" class="btn btn-secondary">DEBUG ON/OFF</button>
@@ -31,7 +31,7 @@
 
 	<div class="mt-2 text-center" id="status"></div>
 
-	<div id="wrapper" class="container-fluid">		
+	<div id="wrapper" class="container-fluid">
 	  <canvas id="canvas"></canvas>
 	  <video id="video" class="video-js vjs-fluid vjs-default-skin" preload="metadata">
 	  	<source src="">
@@ -61,10 +61,7 @@
 		let source = 'camera'; // camera|video|stream
 		let model = 'BlazePoseFull';
 
-		// Enable 3D tracking
-		tracker.enable3D = true;
-
-		// Automatically choose exercise based on URL
+		// Automatically set exercise
 		const page = window.location.pathname;
 		if (page.includes("modelJJ")) {
 			tracker.setExercise('jumping_jack');
@@ -74,32 +71,38 @@
 			tracker.setExercise('leg_raise');
 		}
 
-		// initialize app
+		// Init UI and sound
 		app.init();
+		soundPlayer.preload();
 
-		// initialize AI tracker model
+		// Configure tracker
 		tracker.setModel(model);
+		tracker.enable3D = true;
 		tracker.autofit = true;
+		tracker.enableAI = false;
 
-		// set-up hooks
-		tracker.on('statuschange', function(msg) {
-			app.updateStatus(msg);
-		});
-		tracker.on('beforeupdate', function(poses) {
+		tracker.on('statuschange', msg => app.updateStatus(msg));
+		tracker.on('beforeupdate', poses => {
 			app.updateDebug(poses);
 			app.updateCounter(poses);
 		});
 
-		// config
 		tracker.elCanvas = '#canvas';
 		tracker.elVideo = '#video';
 		tracker.el3D = '#view_3d';
 		tracker.pointWidth = 6;
 		tracker.pointRadius = 8;
 
-		// start prediction from camera
+		// Start camera
 		tracker.run(source);
+
+		// Play custom leg raise instructions, then start AI
+		soundPlayer.playIntro(() => {
+			console.log('Leg raise intro finished. Enabling AI.');
+			tracker.enableAI = true;
+		}, 'legraises');
 	</script>
+
 
 	<script>
 		const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;

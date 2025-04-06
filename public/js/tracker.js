@@ -24,12 +24,12 @@ const tracker = {
         'detectorerror': [], // if detector error 
         'videoerror': [] // if video error
     },
+    legRaiseReady: false,
 
     // HTML elements
     el3D: '#view_3d', // HTML element for 3D keypoint
     elCanvas: '#canvas', // HTML element for canvas
     elVideo: '#video', // HTML element for video
-    
     // internals
     detector: null, // tensor flow detector instance
     reqID: null, // requested frame ID
@@ -335,17 +335,15 @@ const tracker = {
         }
     },
 
-    /*
-        Run predictions
-     */
+    /*-------------------------------------------------------------------------------------------------Run predictions*/
+
     run: function(source) {
         if(source === 'camera')
             tracker.initCamera();
     },
 
-    /*
-        Initialize ScatterGL
-     */
+    /*-------------------------------------------------------------------------------------------Initialize ScatterGL*/
+
     init3D: function() {
         if (tracker.scatterGLEl == null) {
             return;
@@ -366,9 +364,8 @@ const tracker = {
         });
     },
 
-    /*
-        Initialize core elements
-     */
+    /*----------------------------------------------------------------------------------------Initialize core elements*/
+
     init: function() {
         tracker.log('Initializing...');
 
@@ -802,11 +799,10 @@ const tracker = {
             const handsUp = lWrist.y < avgTorsoY && rWrist.y < avgTorsoY;
 
             if (!handsUp) {
-                tracker.ctx.fillStyle = 'red';
-                tracker.ctx.font = '24px Arial';
-                tracker.ctx.fillText('Raise your hands!', 30, 100);
+                soundPlayer.playMistake('bad_posture.mp3');
                 return;
             }
+
 
             if (tracker.legRaiseSide === 'left') {
                 if (tracker.legRaiseState === 'down' && leftRaised) {
@@ -882,28 +878,30 @@ const tracker = {
             if (tracker.squatState === 'down' && isStanding && !kneesCaving) {
                 tracker.squatCounter++;
                 tracker.squatState = 'up';
-            if(tracker.squatCounter <= 20) {
-                soundPlayer.play(tracker.squatCounter);//----------------------------------- SOUND
-                lastSquatTime = performance.now();
-            }
-            if(tracker.squatCounter > 20) {
-                tracker.squatCounter = 0;
-            }
-
+                if (tracker.squatCounter <= 20) {
+                    soundPlayer.play(tracker.squatCounter);
+                    lastSquatTime = performance.now();
+                }
+                if (tracker.squatCounter > 20) {
+                    tracker.squatCounter = 0;
+                }
             }
 
             tracker.ctx.fillStyle = 'lime';
             tracker.ctx.font = '28px Arial';
             tracker.ctx.fillText('Squats: ' + tracker.squatCounter, 30, 60);
 
+            if (kneesCaving) {
+                soundPlayer.playMistake('knees_caving.mp3');
+            }
 
             if (performance.now() - lastSquatTime > 8000) {
                 soundPlayer.playRandomMotivation();
-                lastSquatTime = performance.now(); // avoid repeating every frame
-                // Play motivation if idle too long
+                lastSquatTime = performance.now();
             }
         }
     },
+
 
     /*
         Handle poses and draw them on canvas
