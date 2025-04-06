@@ -30,7 +30,7 @@
     <div class="bar"></div>
   </div>  
 
-  <audio id="welcomeAudio" src="../T2S/homepage/ElevenLabs_2025-04-06T00_53_19_Rachel_pre_sp90_s50_sb65_se0_b_m2.mp3"></audio>
+  <audio id="welcomeAudio" src="sounds/welcome.mp3"></audio>
 
   <script>
     const waveform = document.getElementById('waveform');
@@ -102,7 +102,7 @@
       console.log('Heard:', transcript);
   
       if (transcript.includes('start')) {
-        window.location.href = 'exerciseSelection.html'; // replace with your actual next page
+        window.location.href = 'exerciseSelection'; // replace with your actual next page
       }
     };
   

@@ -15,6 +15,10 @@ app.set('views', path.join(__dirname, 'public', 'views')); // Correct the views 
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'homepage.html'));
+});
+
+app.get('/exerciseSelection', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'exerciseSelection.html'));
 });
 
