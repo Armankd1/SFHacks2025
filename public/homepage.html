@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/homepage.css">
+  <style>
+    :root {
+      --animation-name: dance;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome.</h1>
+  <p>Tap anywhere on the screen,<br>or say ‘Start’ to begin.</p>
+
+  <div class="pulse-waveform paused" id="waveform">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>  
+
+  <audio id="welcomeAudio" src="../T2S/homepage/ElevenLabs_2025-04-06T00_53_19_Rachel_pre_sp90_s50_sb65_se0_b_m2.mp3"></audio>
+
+  <script>
+    const waveform = document.getElementById('waveform');
+    const audio = document.getElementById('welcomeAudio');
+    const bars = waveform.querySelectorAll('.bar');
+  
+    const delays = [0, 0.2, 0.1, 0.4, 0.15, 0.05, 0.3, 0.2, 0.35, 0.1, 0.25];
+  
+    function getDelay(index) {
+      return delays[index] + 's';
+    }
+  
+    function restoreAnimations() {
+      bars.forEach((bar, index) => {
+        const animationName = getComputedStyle(document.documentElement).getPropertyValue('--animation-name').trim();
+        bar.style.animation = `${animationName} 1s infinite ease-in-out`;
+        bar.style.animationDelay = getDelay(index);
+      });
+    }
+  
+    function smoothReset() {
+      bars.forEach(bar => {
+        bar.style.animation = 'none';
+      });
+  
+      requestAnimationFrame(() => {
+        bars.forEach(bar => {
+          bar.style.height = '30px';
+        });
+      });
+    }
+  
+    function playWelcome() {
+      if (!audio.paused) return;
+  
+      stopRecognition(); // stop listening during audio
+      waveform.classList.remove('paused');
+      restoreAnimations();
+      audio.play();
+    }
+  
+    audio.addEventListener('play', () => {
+      waveform.classList.remove('paused');
+    });
+  
+    audio.addEventListener('pause', () => {
+      waveform.classList.add('paused');
+    });
+  
+    audio.addEventListener('ended', () => {
+      waveform.classList.add('paused');
+      smoothReset();
+      startRecognition(); // resume voice input AFTER audio ends
+    });
+  
+    // Remove these lines to disable manual triggering
+    // document.body.addEventListener('click', playWelcome);
+    // document.body.addEventListener('keydown', playWelcome);
+  
+    // === VOICE SETUP ===
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+  
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+  
+    recognition.onresult = (event) => {
+      const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+      console.log('Heard:', transcript);
+  
+      if (transcript.includes('start')) {
+        window.location.href = 'exerciseSelection.html'; // replace with your actual next page
+      }
+    };
+  
+    recognition.onerror = (event) => {
+      console.warn('Voice recognition error:', event.error);
+    };
+  
+    recognition.onend = () => {
+      // Auto-restart if not paused manually
+      if (shouldBeListening) recognition.start();
+    };
+  
+    let shouldBeListening = true;
+  
+    function stopRecognition() {
+      shouldBeListening = false;
+      recognition.stop();
+    }
+  
+    function startRecognition() {
+      shouldBeListening = true;
+      recognition.start();
+    }
+  
+    // Add click/tap navigation when waiting for voice input
+    document.addEventListener('click', () => {
+      if (audio.paused && shouldBeListening) {
+        window.location.href = '/nextpage.html';
+      }
+    });
+
+    // === INIT FLOW ===
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        playWelcome();
+  
+        setInterval(() => {
+          if (audio.paused) {
+            audio.currentTime = 0;
+            playWelcome();
+          }
+        }, 8000); // repeat every 8 seconds
+      }, 1000);
+    });
+  </script>
+  
+</body>
+</html>
