@@ -4,10 +4,32 @@ const soundPlayer = {
   cache: {},
   motivational: [
     'Keep_Going.mp3',
-    'Keep_Going1.mp3',
-    'Keep_Going2.mp3'
+    'Keep_Going1.mp3'
   ],
   lastPlayTime: null,
+
+  playIntro: function(callback) {
+    const intro = new Audio('sounds/instructions_squads.mp3');
+    intro.onended = () => {
+      if (typeof callback === 'function') callback();
+    };
+    intro.play();
+  },
+
+  playFinal: function(callback) {
+    const final = this.cache[20];
+    if (final) {
+      final.pause();
+      final.currentTime = 0;
+      final.play();
+      final.onended = () => {
+        if (typeof callback === 'function') {
+          callback();
+        }
+      };
+    }
+  },
+
 
   preload: function(max = 20) {
     for (let i = 1; i <= max; i++) {

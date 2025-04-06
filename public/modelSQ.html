@@ -35,6 +35,7 @@
 	        </a>
 	    </div>
 	</div>
+
 	<div id="controls">
 		<form method="GET">
 			<div class="container">
@@ -82,14 +83,17 @@
 	<script src="js/app.js"></script>
 	<script src="js/tracker.js"></script>
 	<script src="js/sound.js"></script>
+
 	<script>
 		let source = 'camera'; // camera|video|stream
 		let model = 'BlazePoseFull';
 
-		// Enable 3D tracking
+		// Set model and 3D options
+		tracker.setModel(model);
 		tracker.enable3D = true;
+		tracker.autofit = true;
 
-		// Automatically choose exercise based on URL
+		// Set exercise type based on page
 		const page = window.location.pathname;
 		if (page.includes("modelJJ")) {
 			tracker.setExercise('jumping_jack');
@@ -99,30 +103,31 @@
 			tracker.setExercise('leg_raise');
 		}
 
-		// initialize app
+		// Initialize UI and sound
 		app.init();
+		soundPlayer.preload();
 
-		// initialize AI tracker model
-		tracker.setModel(model);
-		tracker.autofit = true;
-
-		// set-up hooks
-		tracker.on('statuschange', function(msg) {
-			app.updateStatus(msg);
-		});
-		tracker.on('beforeupdate', function(poses) {
+		// Setup tracker hooks
+		tracker.on('statuschange', msg => app.updateStatus(msg));
+		tracker.on('beforeupdate', poses => {
 			app.updateDebug(poses);
 			app.updateCounter(poses);
 		});
 
-		// config
-		tracker.elCanvas = '#canvas';
-		tracker.elVideo = '#video';
-		tracker.el3D = '#view_3d';
-		tracker.pointWidth = 6;
-		tracker.pointRadius = 8;
+		// STEP 1: Disable AI temporarily
+		tracker.enableAI = false;
+
+		// STEP 2: Start camera immediately (shows live video)
 		tracker.run(source);
 
+		// STEP 3: Play intro, THEN enable AI tracking
+		soundPlayer.playIntro(() => {
+			console.log('Intro done. Starting AI tracking.');
+			tracker.enableAI = true;
+		});
 	</script>
+
+
+
 </body>
 </html>
