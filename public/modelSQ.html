@@ -103,38 +103,51 @@
 	<script src="https://cdn.jsdelivr.net/npm/scatter-gl@0.0.13/lib/scatter-gl.min.js"></script>
 
 	<!-- Load tracker.js and app.js-->
-	<script src="../js/app.js"></script>
-	<script src="../js/tracker.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/tracker.js"></script>
+	<script src="js/sound.js"></script>
 	<script>
-
-		let source = 'camera'; // camera|video|stream		
+		let source = 'camera'; // camera|video|stream
 		let sourceVideo = '';
 		let model = 'BlazePoseFull';
 
+		// Enable 3D tracking
+		tracker.enable3D = true;
+
+		// Automatically choose exercise based on URL
+		const page = window.location.pathname;
+		if (page.includes("modelJJ")) {
+			tracker.setExercise('jumping_jack');
+		} else if (page.includes("modelSQ")) {
+			tracker.setExercise('squat');
+		} else if (page.includes("modelLR")) {
+			tracker.setExercise('leg_raise');
+		}
+
 		// initialize app
 		app.init();
-		
+
 		// initialize AI tracker model
 		tracker.setModel(model);
-		tracker.autofit = true; // enable auto resize/fit
+		tracker.autofit = true;
 
 		// set-up hooks
 		tracker.on('statuschange', function(msg) {
 			app.updateStatus(msg);
-        });
+		});
 		tracker.on('beforeupdate', function(poses) {
 			app.updateDebug(poses);
 			app.updateCounter(poses);
 		});
 
-		// config		
-	    tracker.elCanvas = '#canvas';
-	    tracker.elVideo = '#video';
-	    tracker.el3D = '#view_3d';
-	    tracker.pointWidth = 6;
-    	tracker.pointRadius = 8;
+		// config
+		tracker.elCanvas = '#canvas';
+		tracker.elVideo = '#video';
+		tracker.el3D = '#view_3d';
+		tracker.pointWidth = 6;
+		tracker.pointRadius = 8;
 
-		// run predictions
+		// start prediction from camera
 		tracker.run(source);
 	</script>
 </body>

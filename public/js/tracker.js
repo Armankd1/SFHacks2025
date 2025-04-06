@@ -12,7 +12,7 @@ const tracker = {
     autofit: false, // bool, enable autofit on canvas scaling
     enableAI: true, // bool, enable or disable tracking
     enableVideo: true, // bool, enable or disable display original video on canvas on canvas
-    enable3D: false, // bool, enable or disable 3D keypoints
+    enable3D: true, // bool, enable or disable 3D keypoints
     pointWidth: 6, // width of line between points
     pointRadius: 8, // point circle radius
     minScore: 0.35, // minimum threshold for estimated point

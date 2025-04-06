@@ -8,75 +8,31 @@
 
 const app = {
     debug: false, // bool, enable/disable debug
-    init: function() {
-        // get selected model name from URL query string
-        const params = new URLSearchParams(window.location.search);
-        if (params.has('model')) {
-            model = params.get('model');
-        }
+        init: function() {
+            const model = 'BlazePoseFull';
+            const source = 'camera';
 
-        // get selected source from URL query string
-        if (params.has('source')) {
-            source = params.get('source');
-        }
+            soundPlayer.preload();
 
+            document.getElementById('source-' + source)?.classList.add('active');
 
-        // update active
-        document.getElementById('model_select').value = model;
-        document.getElementById('source-' + source).classList.add('active');
-
-        // append event listeners to source select buttons
-        const sources = document.querySelectorAll('.source-select');
-        sources.forEach(el => {
-            el.addEventListener('click', function(e) {
-                let href = '?model=' + model + '&source=' + this.getAttribute('data-source');
-                if (source == this.getAttribute('data-source')) {
-                    href = href + '&url=' + sourceVideo;
-                }
-
-                window.location.href = href;
+            const sources = document.querySelectorAll('.source-select');
+            sources.forEach(el => {
+                el.addEventListener('click', function() {
+                    let href = '?source=' + this.getAttribute('data-source');
+                    window.location.href = href;
+                });
             });
-        });
 
-        // append event listener to model select
-        document.getElementById('model_select').addEventListener('change', function(e) {
-            const href = '?model=' + this.value + '&source=' + source;
-            window.location.href = href;
-        });
-
-        // update elements by source
-        switch (source) {
-            case 'camera':
+            if (source === 'camera') {
                 document.getElementById('canvas').classList.add('camera');
-                break;
-        };
+            }
 
-        // ------------------------
-        // btn: AI TRACKING ON/OFF
-        document.getElementById('btn_toggle_ai').addEventListener('click', function() {
-            app.toggleAI();
-        });
+            // Debug + Controls toggles
+            document.getElementById('btn_toggle_debug')?.addEventListener('click', app.toggleDebug);
+            document.getElementById('btn_toggle_controls')?.addEventListener('click', app.toggleControls);
+        },
 
-        // btn: DEBUG ON/OFF
-        document.getElementById('btn_toggle_debug').addEventListener('click', function() {
-            app.toggleDebug();
-        });
-
-        // btn: 3D VIEW ON/OFF
-        document.getElementById('btn_toggle_3d').addEventListener('click', function() {
-            app.toggle3D();
-        });
-
-        // btn: VIDEO ON/OFF
-        document.getElementById('btn_toggle_video').addEventListener('click', function() {
-            app.toggleVideo();
-        });
-
-        // btn: SHOW/HIDE CONTROLS
-        document.getElementById('btn_toggle_controls').addEventListener('click', function() {
-            app.toggleControls();
-        });
-    },
 
     // handle toggle button
     toggleAI: function() {
