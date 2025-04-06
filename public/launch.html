@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Launch</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: white;
+      font-family: 'Inclusive Sans', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tap anywhere to begin.</h1>
+
+  <script>
+    document.body.addEventListener('click', () => {
+      window.location.href = 'homePage';
+    });
+    document.body.addEventListener('keydown', () => {
+      window.location.href = 'homePage';
+    });
+  </script>
+</body>
+</html>
