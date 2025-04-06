@@ -928,6 +928,8 @@ const tracker = {
 
             const poseDuration = now - tracker.poseVisibleSince;
 
+
+
             if (poseDuration >= 2000 && !tracker.poseReady) {
                 tracker.poseReady = true;
                 console.log("Pose is stable. Start tracking squats.");
