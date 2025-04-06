@@ -2,7 +2,11 @@
 
 const soundPlayer = {
   cache: {},
-  motivational: ['Keep_Going.mp3', 'Dont_Stop.mp3', 'Push_Through.mp3'],
+  motivational: [
+    'Keep_Going.mp3',
+    'Keep_Going1.mp3',
+    'Keep_Going2.mp3'
+  ],
   lastPlayTime: null,
 
   preload: function(max = 15) {
@@ -10,7 +14,9 @@ const soundPlayer = {
       this.cache[i] = new Audio(`sounds/${i}.mp3`);
     }
     this.cache['done'] = new Audio('sounds/Well_Done.mp3');
-    this.motivational.forEach((file) => {
+
+    // Preload exact motivational files
+    this.motivational.forEach(file => {
       this.cache[file] = new Audio(`sounds/${file}`);
     });
   },
