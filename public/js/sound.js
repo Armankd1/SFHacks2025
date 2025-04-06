@@ -9,10 +9,11 @@ const soundPlayer = {
   ],
   lastPlayTime: null,
 
-  preload: function(max = 15) {
+  preload: function(max = 20) {
     for (let i = 1; i <= max; i++) {
       this.cache[i] = new Audio(`sounds/${i}.mp3`);
     }
+    this.cache['instructions_squads'] = new Audio('sounds/instructions_squads.mp3');
     this.cache['done'] = new Audio('sounds/Well_Done.mp3');
 
     // Preload exact motivational files

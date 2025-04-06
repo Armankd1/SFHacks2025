@@ -9,6 +9,7 @@ const tracker = {
         enableTracking: true,
         trackerType: poseDetection.TrackerType.BoundingBox
     },
+    instructionsPlayed: false,// ----------------------------------------------------------- INSTRUCTIONS PLAY
     autofit: false, // bool, enable autofit on canvas scaling
     enableAI: true, // bool, enable or disable tracking
     enableVideo: true, // bool, enable or disable display original video on canvas on canvas
@@ -715,7 +716,28 @@ const tracker = {
         tracker.squatCounter = 0;
         tracker.jumpingJackCounter = 0;
         tracker.legRaiseCounter = 0;
+        tracker.instructionsPlayed = false;
         console.log("Exercise selected:", exName);
+
+        // Play instructions audio before enabling squat detection
+        if (exName === 'squat') {
+            const instructionsAudio = soundPlayer.cache['instructions_squads'];
+            if (instructionsAudio) {
+                instructionsAudio.play();
+                instructionsAudio.onended = () => {
+                    tracker.instructionsPlayed = true;
+                    console.log("Instructions finished. Squat tracking enabled.");
+                    tracker.run(source);
+                };
+            } else {
+                console.warn("Instructions audio not found. Starting squat tracking immediately.");
+                tracker.instructionsPlayed = true;
+                tracker.run(source);
+            }
+        } else {
+            tracker.instructionsPlayed = true; // enable tracking immediately for other exercises
+            tracker.run(source);
+        }
     },
 
     detectJumpingJacks: function(pose) {
@@ -964,8 +986,15 @@ const tracker = {
                 if (tracker.poseReady && tracker.enable3D && pose.keypoints3D?.length > 0) {
                     switch (tracker.exercise) {
                         case 'squat':
-                            tracker.detectSquats(pose);
+                            if (tracker.instructionsPlayed) {
+                                tracker.detectSquats(pose);
+                            } else {
+                                tracker.ctx.fillStyle = 'yellow';
+                                tracker.ctx.font = '24px Arial';
+                                tracker.ctx.fillText('Listen to the instructions...', 30, 60);
+                            }
                             break;
+
                         case 'jumping_jack':
                             tracker.detectJumpingJacks(pose);
                             break;
