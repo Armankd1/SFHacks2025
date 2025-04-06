@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 import exerciseData from './public/data/exercise.js'; // Use a relative path
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,6 +24,10 @@ app.get('/exerciseSelection', (req, res) => {
 
 app.get('/model', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'modelJJ.html'));
+});
+
+app.get('/infoPage', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'infopage.html'));
 });
 
 app.get('/exerciseExplainer', (req, res) => {
