@@ -20,10 +20,6 @@ const app = {
             source = params.get('source');
         }
 
-        // get defined video/stream URL from URL query string
-        if (params.has('url')) {
-            sourceVideo = params.get('url');
-        }
 
         // update active
         document.getElementById('model_select').value = model;
@@ -37,61 +33,21 @@ const app = {
                 if (source == this.getAttribute('data-source')) {
                     href = href + '&url=' + sourceVideo;
                 }
+
                 window.location.href = href;
             });
         });
 
         // append event listener to model select
         document.getElementById('model_select').addEventListener('change', function(e) {
-            const href = '?model=' + this.value + '&source=' + source + '&url=' + sourceVideo;
+            const href = '?model=' + this.value + '&source=' + source;
             window.location.href = href;
-        });
-
-        // append event listener to load video URL button
-        document.getElementById('btn_load_src').addEventListener('change', function(e) {
-            sourceVideo = document.getElementById('video_src').value;
         });
 
         // update elements by source
         switch (source) {
             case 'camera':
-                document.getElementById('video_src_area').style.display = "none";
                 document.getElementById('canvas').classList.add('camera');
-                break;
-
-            case 'video':
-                document.getElementById('video_src_area').style.display = "block";
-                if (sourceVideo.trim() == '') {
-                    sourceVideo = defaultVideo;
-                }
-                document.getElementById('video').src = sourceVideo;
-                document.querySelector('#video source').src = sourceVideo;
-                document.getElementById('video_src').value = sourceVideo;
-                document.getElementById('video_src_prefix').innerHTML = 'MP4,AVI,MKV,WEBM';
-                document.getElementById('canvas').classList.add('clickable');
-
-                // change video source URL input
-                document.getElementById('btn_load_src').addEventListener('click', function() {
-                    const src = document.getElementById('video_src').value;
-                    tracker.loadVideo(src);
-                });
-                break;
-
-            case 'stream':
-                document.getElementById('video_src_area').style.display = "block";
-                if (sourceVideo.trim() == '') {
-                    sourceVideo = defaultStream;
-                }
-                document.querySelector('#video source').src = sourceVideo;
-                document.getElementById('video_src').value = sourceVideo;
-                document.getElementById('video_src_prefix').innerHTML = 'IPTV STREAM,m3u8';
-                document.getElementById('canvas').classList.add('clickable');
-
-                // change video source URL input
-                document.getElementById('btn_load_src').addEventListener('click', function() {
-                    const src = document.getElementById('video_src').value;
-                    tracker.loadStream(src);
-                });
                 break;
         };
 
