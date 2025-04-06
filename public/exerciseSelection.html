@@ -142,13 +142,17 @@
     
         if (!shouldBeListening) return;
     
-        if (transcript.includes('jumping') || transcript.includes('one') || transcript.includes('jack')) {
+        if (transcript.includes('one')) {
           window.location.href = '/exerciseExplainer?exercise=JumpingJack';
-        } else if (transcript.includes('squat') || transcript.includes('two')) {
+        } else if (transcript.includes('two')) {
           window.location.href = '/exerciseExplainer?exercise=Squat';
-        } else if (transcript.includes('knee') || transcript.includes('three') || transcript.includes('raise')) {
+        } else if (transcript.includes('three')) {
           window.location.href = '/exerciseExplainer?exercise=HighKneeRaises';
-        } else {
+        } else if (transcript.includes('repeat')) {
+          console.log("Repeating Audio");
+          playAudio();
+        }
+        else {
           // If we heard something but didn't recognize a command, restart the timeout
           responseTimeout = setTimeout(() => {
             console.log("No valid command detected, restarting audio...");

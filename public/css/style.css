@@ -101,7 +101,7 @@ a {
   display: flex;
   flex-direction: row; /* Changed from column to row */
   justify-content: space-around; /* Distribute space between items */
-  align-items: flex-start; /* Align items to the top */
+  align-items: center; /* Align items to the top */
   margin: 2rem auto;
   flex-wrap: wrap; /* Allow wrapping on smaller screens */
   min-height: 100vh; /* Take up a full viewport height */
