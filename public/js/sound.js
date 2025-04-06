@@ -31,7 +31,7 @@ const soundPlayer = {
   },
 
 
-  preload: function(max = 20) {
+  preload: function(max = 2) {
     for (let i = 1; i <= max; i++) {
       this.cache[i] = new Audio(`sounds/${i}.mp3`);
     }
@@ -50,6 +50,22 @@ const soundPlayer = {
       this.cache[num].currentTime = 0;
       this.cache[num].play();
       this.lastPlayTime = performance.now();
+
+      // 🧠 Custom logic after 20.mp3
+      if (num === 2) {
+        this.cache[num].onended = () => {
+          console.log("✅ 20 reps reached. Redirecting...");
+          const ctx = document.getElementById('canvas')?.getContext('2d');
+          if (ctx) {
+            ctx.fillStyle = 'green';
+            ctx.font = '28px Arial';
+            ctx.fillText('Workout complete! Redirecting...', 30, 130);
+          }
+          setTimeout(() => {
+            window.location.href = '/exerciseSelection';
+          }, 3000);
+        };
+      }
     }
   },
 
