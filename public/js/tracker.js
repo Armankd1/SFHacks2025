@@ -896,12 +896,6 @@ const tracker = {
             tracker.ctx.font = '28px Arial';
             tracker.ctx.fillText('Squats: ' + tracker.squatCounter, 30, 60);
 
-            if (kneesCaving) {
-                tracker.ctx.fillStyle = 'red';
-                tracker.ctx.font = '24px Arial';
-                tracker.ctx.fillText('Knees are caving in!', 30, 100);
-            }
-
 
             if (performance.now() - lastSquatTime > 8000) {
                 soundPlayer.playRandomMotivation();

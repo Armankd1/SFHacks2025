@@ -149,7 +149,7 @@ a {
 /* === Misc (not used but preserved) === */
 #canvas, #video, #view_3d, #info_debug, #info_counter,
 #controls, #status, #btn_toggle_controls, .container-fluid,
-.copyright, .footer, .camera, .github-corner {
+.copyright, .footer, .camera {
   display: none;
 }
 
