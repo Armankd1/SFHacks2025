@@ -10,6 +10,25 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
+  min-height: 100vh;
+}
+
+/* Top section - full screen height with centered content */
+.head, p, .pulse-waveform {
+  text-align: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* First section takes up full viewport height */
+.top-section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
 }
 
 h1 {
@@ -78,32 +97,52 @@ a {
 .exercises {
   max-width: 1200px;
   width: 100%;
-  padding: 0 2rem;
+  padding: 2rem;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 2rem;
+  flex-direction: row; /* Changed from column to row */
+  justify-content: space-around; /* Distribute space between items */
+  align-items: flex-start; /* Align items to the top */
+  margin: 2rem auto;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  min-height: 100vh; /* Take up a full viewport height */
 }
 
+/* Each exercise is now a vertical column */
 .jumpJack, .squat, .highKneeRaises {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Changed from row to column */
   align-items: center;
   text-align: center;
-  margin-bottom: 5%;
+  margin: 1rem;
+  width: 30%; /* Set width for each column */
+  min-width: 300px; /* Minimum width before wrapping */
 }
 
+/* Image container */
 .jj-image, .sq-image, .kr-image {
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin-bottom: 1rem;
 }
 
+/* Exercise heading/text */
 .exHead {
   font-size: 2.5rem;
   font-family: 'Inclusive Sans', Arial, sans-serif;
-  margin-top: 10px;
+  margin-top: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .exercises {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .jumpJack, .squat, .highKneeRaises {
+    width: 80%;
+    margin-bottom: 3rem;
+  }
 }
 
 /* === Misc (not used but preserved) === */

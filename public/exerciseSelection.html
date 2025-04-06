@@ -7,6 +7,7 @@
     <title>Exercise Selection</title>
 </head>
 <body>
+  <div class = "top-section">
     <h1 class="head">Select an Exercise</h1>
     <p>Here is the current list of exercises.</p>
 
@@ -17,11 +18,12 @@
         <div class="bar"></div><div class="bar"></div>
     </div>
 
+  </div>
     <div class="exercises">
         <div class="jumpJack">
             <div class="jj-image">
                 <a href="/exerciseExplainer?exercise=JumpingJack">
-                    <img src="images/JumpingJackIcon.png" width="400" height="400" />
+                    <img src="images/JumpingJackIcon.png" width="380" height="380" />
                 </a>
             </div>
             <h2 class="exHead">Jumping Jacks</h2>
@@ -29,7 +31,7 @@
         <div class="squat">
             <div class="sq-image">
                 <a href="/exerciseExplainer?exercise=Squat">
-                    <img src="images/SquatIcon.png" width="400" height="400" />
+                    <img src="images/SquatIcon.png" width="380" height="380" />
                 </a>
             </div>
             <h2 class="exHead">Squats</h2>
@@ -37,7 +39,7 @@
         <div class="highKneeRaises">
             <div class="kr-image">
                 <a href="/exerciseExplainer?exercise=HighKneeRaises">
-                    <img src="images/KneeRaiseIcon.png" width="400" height="400" />
+                    <img src="images/KneeRaiseIcon.png" width="380" height="380" />
                 </a>
             </div>
             <h2 class="exHead">High Knee Raises</h2>
@@ -52,6 +54,7 @@
       const bars = waveform.querySelectorAll('.bar');
       const delays = [0, 0.2, 0.1, 0.4, 0.15, 0.05, 0.3, 0.2, 0.35, 0.1, 0.25];
       let shouldBeListening = false;
+      let responseTimeout = null;
     
       function getDelay(index) {
         return delays[index] + 's';
@@ -83,6 +86,17 @@
       function startRecognition() {
         shouldBeListening = true;
         recognition.start();
+        
+        // Clear any existing timeout
+        if (responseTimeout) {
+          clearTimeout(responseTimeout);
+        }
+        
+        // Set a new timeout - if no response in 10 seconds, replay audio
+        responseTimeout = setTimeout(() => {
+          console.log("No response detected for 10 seconds, restarting audio...");
+          playAudio(); // This will stop recognition, play audio, and then start recognition again
+        }, 10000); // 10 seconds
       }
     
       function playAudio() {
@@ -118,17 +132,28 @@
       recognition.lang = 'en-US';
     
       recognition.onresult = (event) => {
+        // Clear the timeout since we got a response
+        if (responseTimeout) {
+          clearTimeout(responseTimeout);
+        }
+        
         const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
         console.log('Heard:', transcript);
     
         if (!shouldBeListening) return;
     
-        if (transcript.includes('jumping') || transcript.includes('one')) {
+        if (transcript.includes('jumping') || transcript.includes('one') || transcript.includes('jack')) {
           window.location.href = '/exerciseExplainer?exercise=JumpingJack';
         } else if (transcript.includes('squat') || transcript.includes('two')) {
           window.location.href = '/exerciseExplainer?exercise=Squat';
-        } else if (transcript.includes('knee') || transcript.includes('three')) {
+        } else if (transcript.includes('knee') || transcript.includes('three') || transcript.includes('raise')) {
           window.location.href = '/exerciseExplainer?exercise=HighKneeRaises';
+        } else {
+          // If we heard something but didn't recognize a command, restart the timeout
+          responseTimeout = setTimeout(() => {
+            console.log("No valid command detected, restarting audio...");
+            playAudio();
+          }, 15000);
         }
       };
     
