@@ -40,8 +40,7 @@
   
     function restoreAnimations() {
       bars.forEach((bar, index) => {
-        const animationName = getComputedStyle(document.documentElement).getPropertyValue('--animation-name').trim();
-        bar.style.animation = `${animationName} 1s infinite ease-in-out`;
+        bar.style.animation = `dance 1s infinite ease-in-out`;
         bar.style.animationDelay = getDelay(index);
       });
     }
@@ -71,6 +70,7 @@
       stopRecognition();
       waveform.classList.remove('paused');
       restoreAnimations();
+      audio.currentTime = 0;
       audio.play().catch(err => {
         console.warn("Playback blocked:", err);
       });
@@ -84,10 +84,10 @@
       waveform.classList.add('paused');
       smoothReset();
       startRecognition();
-      interactionStarted = true; // Allow redirects after audio ends
+      interactionStarted = true;
     });
   
-    // === VOICE SETUP ===
+    // === Voice Recognition ===
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
@@ -97,8 +97,14 @@
     recognition.onresult = (event) => {
       const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
       console.log('Heard:', transcript);
-      if (transcript.includes('start') && interactionStarted) {
+  
+      if (!interactionStarted) return;
+  
+      if (transcript.includes('start')) {
         window.location.href = 'exerciseSelection.html';
+      } else if (transcript.includes('repeat')) {
+        interactionStarted = false;
+        playInfoAudio();
       }
     };
   
@@ -116,15 +122,15 @@
       }
     });
   
-    // Disable keyboard input
     document.body.addEventListener('keydown', (e) => {
       e.preventDefault();
     });
   
-    // Start audio on load
+    // Autoplay on load
     window.addEventListener('load', () => {
       playInfoAudio();
     });
-  </script>  
+  </script>
+  
 </body>
 </html>
