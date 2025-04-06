@@ -2,19 +2,19 @@ let exerciseData = [
     {
         exerciseName: "JumpingJack",
         exerciseHeader: "Jumping Jack",
-        exerciseText: "full body cardio – medium",
+        exerciseText: "Full Body Cardio – Medium",
         audioSource: "../sounds/jumpingJack.mp3"
      },
     {
         exerciseName: "Squat",
         exerciseHeader: "Squat",
-        exerciseText: "legs and core – medium",
+        exerciseText: "Legs And Core – Medium",
         audioSource: "../sounds/squat.mp3"
  },
     {
         exerciseName: "HighKneeRaises",
         exerciseHeader: "High Knee Raises",
-        exerciseText: "lower body strength – easy",
+        exerciseText: "Lower Body Strength – Easy",
         audioSource: "../sounds/kneeRaise.mp3"
     }
 ];
