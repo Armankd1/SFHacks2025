@@ -2,8 +2,7 @@
 const tracker = {
     // config options
     detectorModel: poseDetection.SupportedModels.BlazePose, // detector model
-    detectorConfig: {
-        runtime: 'tfjs', // detector configuration
+    detectorConfig: { // detector configuration
         modelType: 'full',
         enableSmoothing: true,
         multiPoseMaxDimension: 256,
@@ -967,7 +966,6 @@ const tracker = {
                         case 'squat':
                             tracker.detectSquats(pose);
                             break;
-
                         case 'jumping_jack':
                             tracker.detectJumpingJacks(pose);
                             break;

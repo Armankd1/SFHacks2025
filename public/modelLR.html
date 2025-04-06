@@ -125,6 +125,46 @@
 		// start prediction from camera
 		tracker.run(source);
 	</script>
+	<script>
+		const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+		const recognition = new SpeechRecognition();
+		recognition.continuous = true;
+		recognition.interimResults = false;
+		recognition.lang = 'en-US';
 
+		let shouldListen = true;
+
+		recognition.onresult = function(event) {
+			const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+			console.log("Heard:", transcript);
+
+			if (transcript.includes("stop")) {
+				shouldListen = false;
+				recognition.stop();
+				console.log("Voice command 'stop' detected. Redirecting in 3 seconds...");
+				const ctx = document.getElementById('canvas')?.getContext('2d');
+				if (ctx) {
+					ctx.fillStyle = 'red';
+					ctx.font = '24px Arial';
+					ctx.fillText('Stopping...', 30, 130);
+				}
+				setTimeout(() => {
+					window.location.href = '/exerciseSelection';
+				}, 3000);
+			}
+		};
+
+		recognition.onerror = function(event) {
+			console.warn("Speech recognition error:", event.error);
+		};
+
+		recognition.onend = function() {
+			if (shouldListen) recognition.start();
+		};
+
+		window.addEventListener('load', () => {
+			recognition.start();
+		});
+	</script>
 </body>
 </html>
