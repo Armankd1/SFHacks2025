@@ -1,6 +1,4 @@
-# SFHacks2025 
-
-MoveMate 🏃‍♀️🧠🎵
+# SFHacks2025 MoveMate 🏃‍♀️🧠🎵
 
 **Empowering motion with AI — your hands-free personal trainer.**
 
