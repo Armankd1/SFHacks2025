@@ -100,6 +100,7 @@
 		// start prediction from camera
 		tracker.run(source);
 	</script>
+
 	<script>
 		const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 		const recognition = new SpeechRecognition();
@@ -109,6 +110,9 @@
 
 		let shouldListen = true;
 
+		// Preload stopping sound
+		const stopAudio = new Audio('/sounds/stopping_exercise.mp3');
+
 		recognition.onresult = function(event) {
 			const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
 			console.log("Heard:", transcript);
@@ -116,16 +120,24 @@
 			if (transcript.includes("stop")) {
 				shouldListen = false;
 				recognition.stop();
-				console.log("Voice command 'stop' detected. Redirecting in 3 seconds...");
+				console.log("Voice command 'stop' detected. Playing sound and redirecting...");
+
+				// Optional canvas message
 				const ctx = document.getElementById('canvas')?.getContext('2d');
 				if (ctx) {
 					ctx.fillStyle = 'red';
 					ctx.font = '24px Arial';
 					ctx.fillText('Stopping...', 30, 130);
 				}
+
+				// Play the sound
+				stopAudio.currentTime = 0;
+				stopAudio.play();
+
+				// Wait for audio duration or fixed delay before redirecting
 				setTimeout(() => {
 					window.location.href = '/exerciseSelection';
-				}, 3000);
+				}, 3000); // match the length of your MP3 or adjust as needed
 			}
 		};
 
@@ -141,5 +153,6 @@
 			recognition.start();
 		});
 	</script>
+
 </body>
 </html>
