@@ -80,16 +80,9 @@ a {
 .camera {
   height:  100% !important;
 }
-.github-corner {
-    position: fixed;
-    top: 0;
-    right: 0;
-    z-index: 9999;
-}
 
-.github-corner:hover .octo-arm {
-    animation: octocat-wave 560ms ease-in-out;
-}
+
+
 
 @keyframes octocat-wave {
     0% {
@@ -117,15 +110,7 @@ a {
     }
 }
 
-@media (max-width: 500px) {
-    .github-corner:hover .octo-arm {
-        animation: none;
-    }
 
-    .github-corner .octo-arm {
-        animation: octocat-wave 560ms ease-in-out;
-    }
-}
 h1 {
   position: relative; /* Change from absolute to relative */
   margin-top: 300px; /* Add some margin for spacing */
