@@ -849,6 +849,9 @@ const tracker = {
             if (tracker.squatState === 'down' && isStanding && !kneesCaving) {
                 tracker.squatCounter++;
                 tracker.squatState = 'up';
+            if(tracker.squatCounter >= 5) {
+                tracker.squatCounter = 0;
+            }
             }
 
             tracker.ctx.fillStyle = 'lime';

@@ -42,36 +42,14 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6">
-						<button type="button" id="source-camera" class="source-select btn btn-primary" data-source="camera" >WEBCAM</button>
 						<button onclick="tracker.squatCounter = 0">Reset Counter</button>
-					</div>
-					<div class="col-md-6">
-						<div class="input-group mb-2">
-					        <div class="input-group-prepend">
-					          <div class="input-group-text">
-					          	<span>MODEL</span>
-					          </div>
-					      	</div>
-					     	<select name="model" id="model_select" class="form-control d-inline-block">
-								<option value="BlazePoseLite">2D + 3D singlepose (faster) / BlazePose</option>
-								<option value="BlazePoseHeavy">2D + 3D singlepose (slower) / BlazePose</option>
-								<option value="BlazePoseFull">2D + 3D singlepose (optimal) / BlazePose</option>
-							</select>
-				     	</div>						
 					</div>
 				</div>
 			</div>
 		</form>	
 
-		<button id="btn_toggle_ai" class="btn btn-secondary">AI TRACKING ON/OFF</button>
-		<button id="btn_toggle_video" class="btn btn-secondary">VIDEO ON/OFF</button>			
-		<button id="btn_toggle_3d" class="btn btn-secondary">3D VIEW ON/OFF</button>
+		<button id="btn_toggle_video" class="btn btn-secondary">VIDEO ON/OFF</button>
 		<button id="btn_toggle_debug" class="btn btn-secondary">DEBUG ON/OFF</button>
-		<div class="btn-group mt-3" role="group" aria-label="Exercise Selection">
-			<button class="btn btn-info" onclick="tracker.setExercise('squat')">Squats</button>
-			<button class="btn btn-info" onclick="tracker.setExercise('jumping_jack')">Jumping Jacks</button>
-			<button class="btn btn-info" onclick="tracker.setExercise('leg_raise')">Leg Raises</button>
-		</div>
 
 
 
