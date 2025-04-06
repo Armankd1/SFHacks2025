@@ -86,8 +86,9 @@
       startRecognition(); // resume voice input AFTER audio ends
     });
   
-    document.body.addEventListener('click', playWelcome);
-    document.body.addEventListener('keydown', playWelcome);
+    // Remove these lines to disable manual triggering
+    // document.body.addEventListener('click', playWelcome);
+    // document.body.addEventListener('keydown', playWelcome);
   
     // === VOICE SETUP ===
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -127,6 +128,13 @@
       recognition.start();
     }
   
+    // Add click/tap navigation when waiting for voice input
+    document.addEventListener('click', () => {
+      if (audio.paused && shouldBeListening) {
+        window.location.href = '/nextpage.html';
+      }
+    });
+
     // === INIT FLOW ===
     window.addEventListener('load', () => {
       setTimeout(() => {
@@ -138,7 +146,7 @@
             playWelcome();
           }
         }, 8000); // repeat every 8 seconds
-      }, 2000);
+      }, 1000);
     });
   </script>
   
