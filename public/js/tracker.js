@@ -745,12 +745,25 @@ const tracker = {
 
             if (tracker.jumpingJackState === 'open' && isClosed) {
                 tracker.jumpingJackCounter++;
+                if(tracker.jumpingJackCounter <=20) {
+                    soundPlayer.play(tracker.jumpingJackCounter);//----------------------------------- SOUND
+                    lastSquatTime = performance.now();
+                }
+                if(tracker.jumpingJackCounter > 20) {
+                    tracker.jumpingJackCounter = 0;
+                }
                 tracker.jumpingJackState = 'closed';
             }
 
             tracker.ctx.fillStyle = 'aqua';
             tracker.ctx.font = '28px Arial';
             tracker.ctx.fillText('Jumping Jacks: ' + tracker.jumpingJackCounter, 30, 60);
+
+            if (performance.now() - lastSquatTime > 8000) {
+                soundPlayer.playRandomMotivation();
+                lastSquatTime = performance.now(); // avoid repeating every frame
+                // Play motivation if idle too long
+            }
         }
     },
 
@@ -801,6 +814,13 @@ const tracker = {
                 }
                 if (tracker.legRaiseState === 'up' && leftLowered) {
                     tracker.legRaiseCounter++;
+                    if(tracker.legRaiseCounter <= 20) {
+                        soundPlayer.play(tracker.legRaiseCounter);//----------------------------------- SOUND
+                        lastSquatTime = performance.now();
+                    }
+                    if(tracker.legRaiseCounter > 20) {
+                        tracker.legRaiseCounter = 0;
+                    }
                     tracker.legRaiseState = 'down';
                     tracker.legRaiseSide = 'right';
                 }
@@ -810,6 +830,13 @@ const tracker = {
                 }
                 if (tracker.legRaiseState === 'up' && rightLowered) {
                     tracker.legRaiseCounter++;
+                    if(tracker.legRaiseCounter < 6) {
+                        soundPlayer.play(tracker.legRaiseCounter);//----------------------------------- SOUND
+                        lastSquatTime = performance.now();
+                    }
+                    if(tracker.legRaiseCounter > 5) {
+                        tracker.legRaiseCounter = 0;
+                    }
                     tracker.legRaiseState = 'down';
                     tracker.legRaiseSide = 'left';
                 }
@@ -818,6 +845,12 @@ const tracker = {
             tracker.ctx.fillStyle = 'violet';
             tracker.ctx.font = '28px Arial';
             tracker.ctx.fillText('Leg Raises: ' + tracker.legRaiseCounter, 30, 60);
+
+            if (performance.now() - lastSquatTime > 8000) {
+                soundPlayer.playRandomMotivation();
+                lastSquatTime = performance.now(); // avoid repeating every frame
+                // Play motivation if idle too long
+            }
         }
     },
 
@@ -849,11 +882,11 @@ const tracker = {
             if (tracker.squatState === 'down' && isStanding && !kneesCaving) {
                 tracker.squatCounter++;
                 tracker.squatState = 'up';
-            if(tracker.squatCounter < 6) {
+            if(tracker.squatCounter <= 20) {
                 soundPlayer.play(tracker.squatCounter);//----------------------------------- SOUND
                 lastSquatTime = performance.now();
             }
-            if(tracker.squatCounter > 5) {
+            if(tracker.squatCounter > 20) {
                 tracker.squatCounter = 0;
             }
 
