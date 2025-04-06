@@ -9,7 +9,6 @@
 const app = {
     debug: false, // bool, enable/disable debug
         init: function() {
-            const model = 'BlazePoseFull';
             const source = 'camera';
 
             soundPlayer.preload();//-------------------- SOUND

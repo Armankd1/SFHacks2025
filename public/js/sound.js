@@ -9,7 +9,7 @@ const soundPlayer = {
   ],
   lastPlayTime: null,
 
-  preload: function(max = 15) {
+  preload: function(max = 20) {
     for (let i = 1; i <= max; i++) {
       this.cache[i] = new Audio(`sounds/${i}.mp3`);
     }

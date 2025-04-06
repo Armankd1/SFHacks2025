@@ -2,7 +2,8 @@
 const tracker = {
     // config options
     detectorModel: poseDetection.SupportedModels.BlazePose, // detector model
-    detectorConfig: { // detector configuration
+    detectorConfig: {
+        runtime: 'tfjs', // detector configuration
         modelType: 'full',
         enableSmoothing: true,
         multiPoseMaxDimension: 256,
@@ -928,6 +929,8 @@ const tracker = {
 
             const poseDuration = now - tracker.poseVisibleSince;
 
+
+
             if (poseDuration >= 2000 && !tracker.poseReady) {
                 tracker.poseReady = true;
                 console.log("Pose is stable. Start tracking squats.");
@@ -964,6 +967,7 @@ const tracker = {
                         case 'squat':
                             tracker.detectSquats(pose);
                             break;
+
                         case 'jumping_jack':
                             tracker.detectJumpingJacks(pose);
                             break;
