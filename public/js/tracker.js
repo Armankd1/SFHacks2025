@@ -826,11 +826,11 @@ const tracker = {
                 }
                 if (tracker.legRaiseState === 'up' && rightLowered) {
                     tracker.legRaiseCounter++;
-                    if(tracker.legRaiseCounter < 6) {
+                    if (tracker.squatCounter <= 20) {
                         soundPlayer.play(tracker.legRaiseCounter);//----------------------------------- SOUND
                         lastSquatTime = performance.now();
                     }
-                    if(tracker.legRaiseCounter > 5) {
+                    if (tracker.squatCounter > 20) {
                         tracker.legRaiseCounter = 0;
                     }
                     tracker.legRaiseState = 'down';

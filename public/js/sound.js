@@ -10,13 +10,6 @@ const soundPlayer = {
   lastMistakeTime: 0,
   mistakeCooldown: 5000, // 5 seconds
 
-  playIntro: function(callback) {
-    const intro = new Audio('sounds/instructions_squads.mp3');
-    intro.onended = () => {
-      if (typeof callback === 'function') callback();
-    };
-    intro.play();
-  },
 
   playIntro: function(callback, exercise = 'squads') {
     const file = `sounds/instructions_${exercise}.mp3`;
