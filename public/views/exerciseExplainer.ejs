@@ -1,4 +1,3 @@
-<!-- filepath: c:\Users\arman\Desktop\Classes\SFHacks2025\SFHacks2025\public\views\exerciseExplainer.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,13 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/homepage.css">
     <title>Exercise Explainer</title>
+    <style>
+      :root {
+        --animation-name: dance;
+      }
+    </style>
 </head>
 <body>
-    <div class = "exerciseExplainer">
-        <h1 class = "explHead"><%= exerciseInfo.exerciseHeader %></h1>
-        <p class = "explP"><%= exerciseInfo.exerciseText %></p> %>
+    <div class="exerciseExplainer">
+        <h1 class="explHead"><%= exerciseInfo.exerciseHeader %></h1>
+        <p class="explP"><%= exerciseInfo.exerciseText %></p>
     </div>
-    <audio id="explainAudio" src="<%= exerciseInfo.audioSource %>"></audio>
+    <audio id="explainAudio" src="<%= exerciseInfo.audioSource %>" preload="auto"></audio>
 
     <div class="pulse-waveform paused" id="waveform">
         <div class="bar"></div>
@@ -26,116 +30,133 @@
         <div class="bar"></div>
         <div class="bar"></div>
         <div class="bar"></div>
-      </div>  
+    </div>
 
-      <script>
-        const waveform = document.getElementById('waveform');
-        const audio = document.getElementById('explainAudio');
-        const bars = waveform.querySelectorAll('.bar');
+    <script>
+      const waveform = document.getElementById('waveform');
+      const audio = document.getElementById('explainAudio');
+      const bars = waveform.querySelectorAll('.bar');
       
-        const delays = [0, 0.2, 0.1, 0.4, 0.15, 0.05, 0.3, 0.2, 0.35, 0.1, 0.25];
+      const delays = [0, 0.2, 0.1, 0.4, 0.15, 0.05, 0.3, 0.2, 0.35, 0.1, 0.25];
+      let shouldBeListening = true;
       
-        function getDelay(index) {
-          return delays[index] + 's';
-        }
+      function getDelay(index) {
+        return delays[index] + 's';
+      }
       
-        function restoreAnimations() {
-          bars.forEach((bar, index) => {
-            const animationName = getComputedStyle(document.documentElement).getPropertyValue('--animation-name').trim();
-            bar.style.animation = `dance 1s infinite ease-in-out`;
-            bar.style.animationDelay = getDelay(index);
-          });
-        }
+      function restoreAnimations() {
+        bars.forEach((bar, index) => {
+          bar.style.animation = `dance 1s infinite ease-in-out`;
+          bar.style.animationDelay = getDelay(index);
+        });
+      }
       
-        function smoothReset() {
+      function smoothReset() {
+        bars.forEach(bar => {
+          bar.style.animation = 'none';
+        });
+      
+        requestAnimationFrame(() => {
           bars.forEach(bar => {
-            bar.style.animation = 'none';
+            bar.style.height = '30px';
           });
+        });
+      }
       
-          requestAnimationFrame(() => {
-            bars.forEach(bar => {
-              bar.style.height = '30px';
-            });
+      function stopRecognition() {
+        shouldBeListening = false;
+        if (recognition && recognition.stop) {
+          recognition.stop();
+        }
+      }
+      
+      function startRecognition() {
+        shouldBeListening = true;
+        if (recognition && recognition.start) {
+          recognition.start();
+        }
+      }
+      
+      function playWelcome() {
+        if (!audio.paused) return;
+      
+        stopRecognition(); // stop listening during audio
+        waveform.classList.remove('paused');
+        restoreAnimations();
+        
+        // Play audio with promise handling for autoplay blocking
+        const playPromise = audio.play();
+        
+        // Catch any autoplay blocking errors
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.warn("Audio autoplay was prevented:", error);
+            // Show a visual cue that audio needs to be manually started
+            document.body.addEventListener('click', playWelcome);
+            document.body.addEventListener('keydown', playWelcome);
           });
         }
+      }
       
-        function playWelcome() {
-          if (!audio.paused) return;
+      audio.addEventListener('play', () => {
+        waveform.classList.remove('paused');
+      });
       
-          stopRecognition(); // stop listening during audio
-          waveform.classList.remove('paused');
-          restoreAnimations();
-          audio.play();
-        }
+      audio.addEventListener('pause', () => {
+        waveform.classList.add('paused');
+      });
       
-        audio.addEventListener('play', () => {
-          waveform.classList.remove('paused');
-        });
+      audio.addEventListener('ended', () => {
+        waveform.classList.add('paused');
+        smoothReset();
+        startRecognition(); // resume voice input AFTER audio ends
+      });
       
-        audio.addEventListener('pause', () => {
-          waveform.classList.add('paused');
-        });
+      // === VOICE SETUP ===
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      let recognition;
       
-        audio.addEventListener('ended', () => {
-          waveform.classList.add('paused');
-          smoothReset();
-          startRecognition(); // resume voice input AFTER audio ends
-        });
-      
-        document.body.addEventListener('click', playWelcome);
-        document.body.addEventListener('keydown', playWelcome);
-      
-        // === VOICE SETUP ===
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-      
+      if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = false;
         recognition.lang = 'en-US';
-      
+        
         recognition.onresult = (event) => {
           const transcript = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
           console.log('Heard:', transcript);
-      
+        
           if (transcript.includes('start')) {
-            window.location.href = '<%= exerciseInfo.modelPage %>'; // replace with your actual next page
+            window.location.href = '<%= exerciseInfo.modelPage %>'; 
           }
         };
-      
+        
         recognition.onerror = (event) => {
           console.warn('Voice recognition error:', event.error);
         };
-      
+        
         recognition.onend = () => {
           // Auto-restart if not paused manually
           if (shouldBeListening) recognition.start();
         };
+      } else {
+        console.warn("Speech recognition not supported in this browser");
+      }
       
-        let shouldBeListening = true;
-      
-        function stopRecognition() {
-          shouldBeListening = false;
-          recognition.stop();
-        }
-      
-        function startRecognition() {
-          shouldBeListening = true;
-          recognition.start();
-        }
-      
-        // === INIT FLOW ===
-        window.addEventListener('load', () => {
-          setTimeout(() => {
+      // === INIT FLOW ===
+      // Play audio immediately when page loads
+      window.addEventListener('DOMContentLoaded', () => {
+        // Try to play immediately
+        playWelcome();
+        
+        // Set up interval to replay if the page is left idle
+        setInterval(() => {
+          if (audio.paused && audio.currentTime === 0) {
+            audio.currentTime = 0;
             playWelcome();
-      
-            setInterval(() => {
-              if (audio.paused) {
-                audio.currentTime = 0;
-                playWelcome();
-              }
-            }, 20000); // repeat every 20 seconds
-          }, 20000);
-        });
-      </script>
+          }
+        }, 10000); // Check every 10 seconds
+      });
+    </script>
 </body>
 </html>
